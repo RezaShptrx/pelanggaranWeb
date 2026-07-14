@@ -1,0 +1,13 @@
+Options -Indexes
+<FilesMatch "\.(php|inc)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+<FilesMatch "^(login|logout|siswa|guru|lapor|laporan|data_siswa|ktnpelanggaran)\.php$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+<Files "functions.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

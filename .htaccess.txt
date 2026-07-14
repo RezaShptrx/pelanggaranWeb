@@ -1,0 +1,2 @@
+# Cegah akses ke folder php dan config
+RedirectMatch 403 ^/pelanggaran/(php|config)/.*$

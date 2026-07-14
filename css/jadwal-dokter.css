@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.jadwal {
+    font-size: 17px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+
+.bi-youtube {
+    color: #dc3545;
+}
+
+.bi-instagram {
+    color: hotpink;
+}
+
+.meta,
+.insta,
+.yt {
+    color: black;
+}

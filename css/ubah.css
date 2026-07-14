@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+
+}
+
+body {
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+
+a.btn:hover {
+    text-decoration: none;
+
+}
+
+.bi-youtube {
+    color: #dc3545;
+}
+
+.bi-instagram {
+    color: hotpink;
+}
+
+.meta,
+.insta,
+.yt {
+    color: black;
+}
+
+.jk {
+    margin-bottom: 20px;
+}

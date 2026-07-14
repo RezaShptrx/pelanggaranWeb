@@ -1,0 +1,46 @@
+html,
+body,
+footer {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    user-select: none;
+}
+
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+img {
+    height: 350px;
+}
+
+.bi-youtube {
+    color: #dc3545;
+}
+
+.bi-instagram {
+    color: hotpink;
+}
+
+.meta,
+.insta,
+.yt {
+    color: black;
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar .container-xl {
+        justify-content: center;
+    }
+
+    .login {
+        margin-top: -50px;
+    }
+
+
+}
