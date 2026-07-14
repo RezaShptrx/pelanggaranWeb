@@ -31,7 +31,7 @@ if ($type === 'siswa') {
     die("Tipe template tidak valid.");
 }
 
-$xlsx = SimpleXLSXGen::fromArray( $data );
+$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $data );
 $xlsx->downloadAs($filename);
 exit;
 ?>
