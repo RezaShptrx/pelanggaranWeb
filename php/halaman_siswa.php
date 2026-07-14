@@ -32,10 +32,11 @@ if (isset($_SESSION["admin"])) {
 }
 
 include('./functions.php');
-$id = $_GET["id"];
+$id = $_SESSION["id_siswa"];
 
 if (!$id) {
-    header("Location: ./guru.php");
+    header("Location: ./../index.php");
+    exit;
 }
 
 $siswa = query("SELECT `id_kelas`, `id_jurusan`, `nis`, `nama_siswa`, `email`, `jmlh_poin`, `role`,`foto` FROM siswa WHERE id_siswa = $id")[0];
@@ -100,64 +101,12 @@ if (isset($_POST["tambah_prestasi"])) {
 </head>
 <body class="bg-[#fcfcfd] text-gray-800 font-sans antialiased selection:bg-primary selection:text-white flex flex-col min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-24 items-center">
-                <!-- Logo -->
-                <a href="#" class="flex items-center gap-4 group cursor-default">
-                    <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center p-2 shadow-inner group-hover:shadow-md transition-all">
-                        <img src="../img/logosmk12.png" alt="Logo" class="w-full h-full object-contain">
-                    </div>
-                    <span class="font-serif font-bold text-2xl tracking-wide text-gray-900 group-hover:text-primary transition-colors">OSIS SMKN 12</span>
-                </a>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="../index.php" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors py-2 px-1">Beranda</a>
-                    <a href="./siswa.php" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors py-2 px-1">Siswa</a>
-                    <a href="./guru.php" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors py-2 px-1" <?= $guru; ?>>Guru</a>
-                    <a href="./ktnpelanggaran.php" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors py-2 px-1">Ketentuan</a>
-                    
-                    <!-- Dropdown -->
-                    <div class="relative ml-4" id="userMenuContainer">
-                        <button onclick="toggleDropdown('userMenu')" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-primary focus:outline-none">
-                            <i class="bi bi-list text-xl text-gray-600"></i>
-                        </button>
-                        <div id="userMenu" class="hidden absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 py-2 z-50 transform origin-top-right transition-all">
-                            <?php if (isset($_SESSION["login"])) : ?>
-                                <a href="#" onclick="openModal('ganti_pw')" class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium" <?= $guru; ?><?= $admin; ?>><i class="bi bi-key me-2"></i>Ganti Password</a>
-                                <a href="#" onclick="openModal('ganti_foto')" class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium" <?= $guru; ?><?= $admin; ?>><i class="bi bi-image me-2"></i>Ganti Foto</a>
-                                <div class="border-t border-gray-100 my-1"></div>
-                                <a href="./logout.php" class="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors font-medium"><i class="bi bi-box-arrow-right"></i> Keluar</a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button onclick="toggleDropdown('mobileMenu')" class="text-gray-500 hover:text-gray-900 p-2 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
-                        <i class="bi bi-list text-3xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Mobile Menu Panel -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 pt-4 pb-6 space-y-2 shadow-xl">
-            <a href="../index.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Beranda</a>
-            <a href="./siswa.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Siswa</a>
-            <a href="./guru.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium" <?= $guru; ?>>Guru</a>
-            <a href="./ktnpelanggaran.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Ketentuan</a>
-            <?php if (isset($_SESSION["login"])) : ?>
-                <div class="border-t border-gray-100 my-4 pt-2"></div>
-                <a href="#" onclick="openModal('ganti_pw')" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium" <?= $guru; ?><?= $admin; ?>><i class="bi bi-key me-2"></i>Ganti Password</a>
-                <a href="#" onclick="openModal('ganti_foto')" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium" <?= $guru; ?><?= $admin; ?>><i class="bi bi-image me-2"></i>Ganti Foto</a>
-                <a href="./logout.php" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-bold"><i class="bi bi-box-arrow-right"></i> Keluar</a>
-            <?php endif; ?>
-        </div>
-    </nav>
+    <!-- Top Action Bar -->
+    <div class="w-full flex justify-end p-6">
+        <a href="./logout.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold transition-colors shadow-sm">
+            <i class="bi bi-box-arrow-right"></i> Keluar
+        </a>
+    </div>
 
     <!-- Main Content -->
     <main class="flex-grow pt-12 pb-24">
@@ -217,30 +166,7 @@ if (isset($_POST["tambah_prestasi"])) {
                                 </dl>
                             </div>
                             
-                            <!-- Action Buttons -->
-                            <div class="flex flex-wrap gap-3">
-                                <a href="./ubah/ubah_siswa.php?id=<?= $id; ?>" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-blue-600 text-white font-bold transition-all hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 text-sm" <?= $hide_siswa; ?>>
-                                    <i class="bi bi-pencil-fill me-2"></i> Ubah Data
-                                </a>
-                                
-                                <a href="./hapus/hapus_siswa.php?id=<?= $id; ?>" onclick="return confirm('Hapus data?')" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-red-600 text-white font-bold transition-all hover:bg-red-700 focus:ring-2 focus:ring-red-600 focus:ring-offset-2 text-sm" <?= $hide_siswa; ?>>
-                                    <i class="bi bi-trash-fill me-2"></i> Hapus Data
-                                </a>
-                                
-                                <?php if ($siswa["role"] === "siswa") : ?>
-                                    <a href="./ubah/ubah_role.php?role=siswa&sk=<?= $id; ?>" onclick="return confirm('Jadikan osis?')" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold transition-all hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 text-sm" <?= $hide_siswa; ?>>
-                                        <i class="bi bi-shield-check me-2"></i> Jadikan OSIS
-                                    </a>
-                                <?php else : ?>
-                                    <a href="./ubah/ubah_role.php?role=osis&sk=<?= $id; ?>" onclick="return confirm('Jadikan siswa?')" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold transition-all hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 text-sm" <?= $hide_siswa; ?>>
-                                        <i class="bi bi-person me-2"></i> Jadikan Siswa
-                                    </a>
-                                <?php endif; ?>
-                                
-                                <button onclick="openModal('tambah_prestasi')" class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-amber-500 text-white font-bold transition-all hover:bg-secondary focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 text-sm" <?= $hide_siswa; ?>>
-                                    <i class="bi bi-award-fill me-2"></i> Tambah Prestasi
-                                </button>
-                            </div>
+                            <!-- No Action Buttons -->
                         </div>
                     </div>
                 </div>

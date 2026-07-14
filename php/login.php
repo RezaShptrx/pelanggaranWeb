@@ -122,7 +122,7 @@ if (isset($_POST["login"])) {
 
             mysqli_query($conn, "INSERT INTO `user_log` (`ip_user`, `username`, `nama_user`, `role`) VALUES ('$ip', '$username', '$nama_user', '$role')");
             if (isset($_SESSION["siswa"])) {
-                header("Location: ./data_siswa.php?id=$id_siswa");
+                header("Location: ./halaman_siswa.php");
             } else {
                 header('Location: ./../index.php');
             }
