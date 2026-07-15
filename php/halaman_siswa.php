@@ -102,7 +102,10 @@ if (isset($_POST["tambah_prestasi"])) {
 <body class="bg-[#fcfcfd] text-gray-800 font-sans antialiased selection:bg-primary selection:text-white flex flex-col min-h-screen">
 
     <!-- Top Action Bar -->
-    <div class="w-full flex justify-end p-6">
+    <div class="w-full flex justify-end gap-3 p-6">
+        <a href="./ketentuan_siswa.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-bold transition-colors shadow-sm">
+            <i class="bi bi-journal-text"></i> Ketentuan
+        </a>
         <a href="./logout.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold transition-colors shadow-sm">
             <i class="bi bi-box-arrow-right"></i> Keluar
         </a>
@@ -327,7 +330,7 @@ if (isset($_POST["tambah_prestasi"])) {
                     <ul class="space-y-4">
                         <li><a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium">Tentang Kami</a></li>
                         <li><a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium">Pertanyaan Umum (FAQs)</a></li>
-                        <li><a href="./ktnpelanggaran.php" class="text-gray-500 hover:text-primary transition-colors font-medium">Ketentuan Pelanggaran</a></li>
+                        <li><a href="./ketentuan_siswa.php" class="text-gray-500 hover:text-primary transition-colors font-medium">Ketentuan Pelanggaran</a></li>
                     </ul>
                 </div>
             </div>

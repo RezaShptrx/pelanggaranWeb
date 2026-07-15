@@ -20,7 +20,7 @@ if (isset($_SESSION["osis"])) {
 
 if (isset($_SESSION["siswa"])) {
     $siswa = "hidden";
-    $link = "./data_siswa.php?id=" . $_SESSION["id_siswa"];
+    $link = "./halaman_siswa.php";
 } else {
     $siswa = "";
     $link = "./../index.php";
@@ -218,33 +218,33 @@ if (isset($_POST["tambah_plgr"])) {
                         </button>
                         
                         <div id="prestasi-content" class="accordion-content expanded bg-white border-t border-gray-100">
-                            <div class="p-6">
+                            <div class="p-3 sm:p-6">
                                 <div class="overflow-x-auto custom-scrollbar border border-gray-100 rounded-xl">
-                                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                                    <table class="w-full text-left border-collapse table-fixed">
                                         <thead>
-                                            <tr class="bg-gray-50/80 text-gray-600 text-sm border-b border-gray-100">
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase text-center w-16">No</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase">Prestasi</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase text-center">Poin</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase text-center w-24" <?= $osis; ?><?= $siswa; ?>>Aksi</th>
+                                            <tr class="bg-gray-50/80 text-gray-600 text-[10px] sm:text-sm border-b border-gray-100">
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase text-center w-10 sm:w-16">No</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase">Prestasi</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase text-center w-14 sm:w-24">Poin</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase text-center w-14 sm:w-24" <?= $osis; ?><?= $siswa; ?>>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100 bg-white">
                                             <?php $nomor = 1; ?>
                                             <?php foreach ($ktnprestasi as $prestasi) : ?>
                                                 <tr class="hover:bg-gray-50/50 transition-colors">
-                                                    <td class="py-3 px-4 text-sm text-gray-500 text-center font-medium"><?= $nomor++; ?></td>
-                                                    <td class="py-3 px-4 text-sm text-gray-700 font-medium"><?= ucfirst($prestasi["det_prestasi"]); ?></td>
-                                                    <td class="py-3 px-4 text-center">
-                                                        <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold ring-1 ring-inset ring-blue-600/20">
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-[11px] sm:text-sm text-gray-500 text-center font-medium"><?= $nomor++; ?></td>
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-[11px] sm:text-sm text-gray-700 font-medium break-words"><?= ucfirst($prestasi["det_prestasi"]); ?></td>
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-center">
+                                                        <span class="inline-flex items-center justify-center px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] sm:text-xs font-bold ring-1 ring-inset ring-blue-600/20">
                                                             +<?= $prestasi["poin_prestasi"]; ?>
                                                         </span>
                                                     </td>
-                                                    <td class="py-3 px-4 text-center relative dropdown-container" <?= $osis; ?><?= $siswa; ?>>
-                                                        <button onclick="toggleDropdown('actionMenuPrestasi_<?= $prestasi["id_prestasi"]; ?>')" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-center relative dropdown-container" <?= $osis; ?><?= $siswa; ?>>
+                                                        <button onclick="toggleDropdown('actionMenuPrestasi_<?= $prestasi["id_prestasi"]; ?>')" class="inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
                                                             <i class="bi bi-three-dots-vertical"></i>
                                                         </button>
-                                                        <div id="actionMenuPrestasi_<?= $prestasi["id_prestasi"]; ?>" class="hidden absolute right-12 top-8 mt-1 w-32 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-gray-100 py-1 z-50 text-left">
+                                                        <div id="actionMenuPrestasi_<?= $prestasi["id_prestasi"]; ?>" class="hidden absolute right-10 sm:right-12 top-6 sm:top-8 mt-1 w-32 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-gray-100 py-1 z-50 text-left">
                                                             <a href="./ubah/ubah_prestasi.php?id=<?= $prestasi["id_prestasi"]; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Ubah</a>
                                                             <a href="./hapus/hapus_prestasi.php?id=<?= $prestasi["id_prestasi"]; ?>" onclick="return confirm('Hapus data?')" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">Hapus</a>
                                                         </div>
@@ -266,16 +266,16 @@ if (isset($_POST["tambah_plgr"])) {
                         </button>
                         
                         <div id="pelanggaran-content" class="accordion-content expanded bg-white border-t border-gray-100">
-                            <div class="p-6">
+                            <div class="p-3 sm:p-6">
                                 <div class="overflow-x-auto custom-scrollbar border border-gray-100 rounded-xl">
-                                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                                    <table class="w-full text-left border-collapse table-fixed">
                                         <thead>
-                                            <tr class="bg-gray-50/80 text-gray-600 text-sm border-b border-gray-100">
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase text-center w-16">No</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase">Jenis</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase">Pelanggaran</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase text-center">Poin</th>
-                                                <th class="py-3 px-4 font-bold tracking-wider uppercase text-center w-24" <?= $osis; ?><?= $siswa; ?>>Aksi</th>
+                                            <tr class="bg-gray-50/80 text-gray-600 text-[10px] sm:text-sm border-b border-gray-100">
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase text-center w-10 sm:w-16">No</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase w-16 sm:w-32">Jenis</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase">Pelanggaran</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase text-center w-12 sm:w-24">Poin</th>
+                                                <th class="p-2 sm:py-3 sm:px-4 font-bold tracking-wider uppercase text-center w-12 sm:w-24" <?= $osis; ?><?= $siswa; ?>>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100 bg-white">
@@ -294,19 +294,19 @@ if (isset($_POST["tambah_plgr"])) {
                                             ?>
                                             <?php foreach ($data_kntplgr as $plgr) : ?>
                                                 <tr class="hover:bg-gray-50/50 transition-colors">
-                                                    <td class="py-3 px-4 text-sm text-gray-500 text-center font-medium"><?= $nomor++; ?></td>
-                                                    <td class="py-3 px-4 text-sm text-gray-900 font-bold"><?= ucwords($plgr["jenis_pelanggaran"]); ?></td>
-                                                    <td class="py-3 px-4 text-sm text-gray-700"><?= ucfirst($plgr["det_pelanggaran"]); ?></td>
-                                                    <td class="py-3 px-4 text-center">
-                                                        <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-red-50 text-red-700 text-xs font-bold ring-1 ring-inset ring-red-600/10">
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-[11px] sm:text-sm text-gray-500 text-center font-medium"><?= $nomor++; ?></td>
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-[11px] sm:text-sm text-gray-900 font-bold break-words"><?= ucwords($plgr["jenis_pelanggaran"]); ?></td>
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-[11px] sm:text-sm text-gray-700 break-words"><?= ucfirst($plgr["det_pelanggaran"]); ?></td>
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-center">
+                                                        <span class="inline-flex items-center justify-center px-1.5 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full bg-red-50 text-red-700 text-[10px] sm:text-xs font-bold ring-1 ring-inset ring-red-600/10">
                                                             -<?= $plgr["poin_pelanggaran"]; ?>
                                                         </span>
                                                     </td>
-                                                    <td class="py-3 px-4 text-center relative dropdown-container" <?= $osis; ?><?= $siswa; ?>>
-                                                        <button onclick="toggleDropdown('actionMenuPlgr_<?= $plgr["id_pelanggaran"]; ?>')" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+                                                    <td class="p-2 sm:py-3 sm:px-4 text-center relative dropdown-container" <?= $osis; ?><?= $siswa; ?>>
+                                                        <button onclick="toggleDropdown('actionMenuPlgr_<?= $plgr["id_pelanggaran"]; ?>')" class="inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
                                                             <i class="bi bi-three-dots-vertical"></i>
                                                         </button>
-                                                        <div id="actionMenuPlgr_<?= $plgr["id_pelanggaran"]; ?>" class="hidden absolute right-12 top-8 mt-1 w-32 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-gray-100 py-1 z-50 text-left">
+                                                        <div id="actionMenuPlgr_<?= $plgr["id_pelanggaran"]; ?>" class="hidden absolute right-10 sm:right-12 top-6 sm:top-8 mt-1 w-32 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-gray-100 py-1 z-50 text-left">
                                                             <a href="./ubah/ubah_plgr.php?id=<?= $plgr["id_pelanggaran"]; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Ubah</a>
                                                             <a href="./hapus/hapus_plgr.php?id=<?= $plgr["id_pelanggaran"]; ?>" onclick="return confirm('Hapus data?')" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">Hapus</a>
                                                         </div>
