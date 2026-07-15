@@ -81,7 +81,7 @@ function tambah_siswa($data)
     }
 
 
-    mysqli_query($conn, "INSERT INTO siswa (`id_kelas`, `id_jurusan`, `nis`, `nama_siswa`, `email`, `jmlh_poin`, `role`, `foto`, `password`) VALUES ('$kelas', '$jurusan', '$nis', '$nama', '$email', '100', '$role', '$foto', '$nis')");
+    mysqli_query($conn, "INSERT INTO siswa (`id_kelas`, `id_jurusan`, `nis`, `nama_siswa`, `email`, `jmlh_poin`, `role`, `foto`, `password`) VALUES ('$kelas', '$jurusan', '$nis', '$nama', '$email', '0', '$role', '$foto', '$nis')");
 
     return mysqli_affected_rows($conn);
 }
@@ -425,7 +425,7 @@ function reset_poin()
 {
     global $conn;
 
-    mysqli_query($conn, "UPDATE siswa SET `jmlh_poin` = 100");
+    mysqli_query($conn, "UPDATE siswa SET `jmlh_poin` = 0");
 
     return mysqli_affected_rows($conn);
 }

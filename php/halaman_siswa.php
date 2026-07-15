@@ -42,7 +42,9 @@ if (!$id) {
 $siswa = query("SELECT `id_kelas`, `id_jurusan`, `nis`, `nama_siswa`, `email`, `jmlh_poin`, `role`,`foto` FROM siswa WHERE id_siswa = $id")[0];
 $kelas = query("SELECT nama_kelas FROM kelas WHERE id_kelas =" . $siswa["id_kelas"])[0];
 $jurusan = query("SELECT nama_jurusan FROM jurusan WHERE id_jurusan = " . $siswa["id_jurusan"])[0];
-$pelanggaran_siswa = query("SELECT * FROM pelanggaran_siswa WHERE id_pelanggar = $id");
+$semua_pelanggaran_siswa = query("SELECT * FROM pelanggaran_siswa WHERE id_pelanggar = $id ORDER BY waktu_pelanggaran DESC");
+$pelanggaran_siswa = array_slice($semua_pelanggaran_siswa, 0, 2);
+$total_pelanggaran = count($semua_pelanggaran_siswa);
 $prestasi_siswa  = query("SELECT * FROM prestasi_siswa WHERE id_siswa = $id");
 $ket_prestasi = query("SELECT * FROM ket_prestasi");
 
@@ -92,6 +94,7 @@ if (isset($_POST["tambah_prestasi"])) {
                     colors: {
                         primary: '#aacddc',
                         secondary: '#6FA8BF',
+                        hover: '#5e8d9fff',
                         tertiary: '#EFBE9D',
                     }
                 }
@@ -103,10 +106,10 @@ if (isset($_POST["tambah_prestasi"])) {
 
     <!-- Top Action Bar -->
     <div class="w-full flex justify-end gap-3 p-6">
-        <a href="./ketentuan_siswa.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-bold transition-colors shadow-sm">
+        <a href="./ketentuan_siswa.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-secondary text-white hover:bg-hover font-bold transition-colors shadow-sm">
             <i class="bi bi-journal-text"></i> Ketentuan
         </a>
-        <a href="./logout.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold transition-colors shadow-sm">
+        <a href="./logout.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 font-bold transition-colors shadow-sm">
             <i class="bi bi-box-arrow-right"></i> Keluar
         </a>
     </div>
@@ -161,7 +164,7 @@ if (isset($_POST["tambah_prestasi"])) {
                                     <div class="grid grid-cols-3 gap-4">
                                         <dt class="font-bold text-gray-500 col-span-1">Poin</dt>
                                         <dd class="col-span-2">
-                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
+                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-black border border-primary/20">
                                                 <?= $siswa["jmlh_poin"]; ?>
                                             </span>
                                         </dd>
@@ -275,6 +278,14 @@ if (isset($_POST["tambah_prestasi"])) {
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        
+                        <?php if ($total_pelanggaran > 2) : ?>
+                            <div class="mt-8 flex justify-center">
+                                <a href="riwayat_pelanggaran.php" class="bg-red-50 hover:bg-red-100 text-red-600 font-medium px-6 py-2.5 rounded-xl transition-colors border border-red-100 flex items-center gap-2">
+                                    Lihat Riwayat Pelanggaran <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     <?php else : ?>
                         <div class="text-center py-12">
                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-50 text-emerald-400 mb-4">
@@ -293,45 +304,47 @@ if (isset($_POST["tambah_prestasi"])) {
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 mt-auto pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16 text-center md:text-left">
                 <div class="md:col-span-5">
-                    <div class="flex items-center gap-3 mb-6">
+                    <div class="flex items-center justify-center md:justify-start gap-3 mb-6">
                         <img src="../img/logosmk12.png" alt="Logo" class="w-12 h-12 object-contain">
                         <h5 class="font-serif font-bold text-xl text-gray-900">OSIS SMKN 12 JAKARTA</h5>
                     </div>
-                    <p class="text-gray-500 leading-relaxed max-w-sm">
+                    <p class="text-gray-500 leading-relaxed max-w-sm mx-auto md:mx-0">
                         Menjaga ketertiban dan kedisiplinan demi mewujudkan lingkungan belajar yang nyaman dan kondusif bagi seluruh siswa.
                     </p>
                 </div>
                 
-                <div class="md:col-span-3">
-                    <h6 class="font-bold text-gray-900 mb-6 font-serif tracking-wide">Sosial Media</h6>
-                    <ul class="space-y-4">
-                        <li>
-                            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors font-medium">
-                                <i class="bi bi-meta text-xl"></i> Meta
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-pink-600 transition-colors font-medium">
-                                <i class="bi bi-instagram text-xl"></i> Instagram
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-red-600 transition-colors font-medium">
-                                <i class="bi bi-youtube text-xl"></i> Youtube
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="md:col-span-4">
-                    <h6 class="font-bold text-gray-900 mb-6 font-serif tracking-wide">Tautan Cepat</h6>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium">Tentang Kami</a></li>
-                        <li><a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium">Pertanyaan Umum (FAQs)</a></li>
-                        <li><a href="./ketentuan_siswa.php" class="text-gray-500 hover:text-primary transition-colors font-medium">Ketentuan Pelanggaran</a></li>
-                    </ul>
+                <div class="col-span-1 md:col-span-7 flex flex-row gap-4 justify-between text-left md:grid md:grid-cols-7 md:gap-12">
+                    <div class="md:col-span-3 w-1/2 md:w-auto">
+                        <h6 class="font-bold text-gray-900 mb-6 font-serif tracking-wide">Sosial Media</h6>
+                        <ul class="space-y-4">
+                            <li>
+                                <a href="#" class="flex items-center justify-start gap-3 text-gray-500 hover:text-blue-600 transition-colors font-medium">
+                                    <i class="bi bi-meta text-xl"></i> Meta
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="flex items-center justify-start gap-3 text-gray-500 hover:text-pink-600 transition-colors font-medium">
+                                    <i class="bi bi-instagram text-xl"></i> Instagram
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="flex items-center justify-start gap-3 text-gray-500 hover:text-red-600 transition-colors font-medium">
+                                    <i class="bi bi-youtube text-xl"></i> Youtube
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="md:col-span-4 w-1/2 md:w-auto">
+                        <h6 class="font-bold text-gray-900 mb-6 font-serif tracking-wide">Tautan Cepat</h6>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium">Tentang Kami</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium">Pertanyaan Umum (FAQs)</a></li>
+                            <li><a href="./ketentuan_siswa.php" class="text-gray-500 hover:text-primary transition-colors font-medium">Ketentuan Pelanggaran</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             

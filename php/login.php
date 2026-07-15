@@ -166,6 +166,7 @@ if (isset($_POST["login"])) {
                     colors: {
                         primary: '#aacddc',
                         secondary: '#6FA8BF',
+                        hover: '#5e8d9fff',
                         tertiary: '#EFBE9D',
                     }
                 }
@@ -229,7 +230,7 @@ if (isset($_POST["login"])) {
                             <label for="remember" class="ml-2 text-sm font-medium text-gray-600 cursor-pointer">Ingat Saya</label>
                         </div>
                         
-                        <button type="submit" name="login" class="w-full flex justify-center py-3.5 px-4 rounded-xl shadow-sm text-sm font-bold text-white bg-primary hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <button type="submit" name="login" class="w-full flex justify-center py-3.5 px-4 rounded-xl shadow-sm text-sm font-bold text-white bg-secondary hover:bg-hover transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                             Masuk
                         </button>
                     </form>

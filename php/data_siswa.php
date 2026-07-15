@@ -209,7 +209,7 @@ if (isset($_POST["tambah_prestasi"])) {
                                     <div class="grid grid-cols-3 gap-4">
                                         <dt class="font-bold text-gray-500 col-span-1">Poin</dt>
                                         <dd class="col-span-2">
-                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary border border-primary/20">
+                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-black border border-primary/20">
                                                 <?= $siswa["jmlh_poin"]; ?>
                                             </span>
                                         </dd>

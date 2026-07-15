@@ -224,7 +224,7 @@ if (isset($_POST["tambah"])) {
                                             <a href="./data_siswa.php?id=<?= $siswa["id_siswa"]; ?>" class="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors"><?= $siswa["nama_siswa"]; ?></a>
                                         </td>
                                         <td class="py-4 px-5 text-center">
-                                            <?php if ($jmlh_poin > 0) : ?>
+                                            <?php if ($jmlh_poin >= 0) : ?>
                                                 <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold ring-1 ring-inset ring-blue-600/10">
                                                     <?= $siswa["jmlh_poin"]; ?>
                                                 </span>
