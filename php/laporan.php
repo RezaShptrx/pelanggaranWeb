@@ -89,6 +89,8 @@ if (isset($_POST["tgl_plgr"])) {
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #94a3b8; 
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
         }
     </style>
 </head>
@@ -164,17 +166,28 @@ if (isset($_POST["tgl_plgr"])) {
                             <p class="text-gray-500">Daftar riwayat pelanggaran tata tertib siswa.</p>
                         </div>
                         
-                        <!-- Search Form -->
-                        <form action="" method="post" class="flex flex-col sm:flex-row items-end sm:items-center gap-3 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">
-                            <div class="flex items-center w-full">
-                                <label for="tanggal" class="text-sm font-semibold text-gray-600 pl-3 pr-2 hidden sm:block whitespace-nowrap">Tanggal:</label>
-                                <input type="date" id="tanggal" name="tanggal" value="<?= $tgl_plgr; ?>" class="w-full sm:w-auto px-3 py-2 text-sm border-none bg-transparent focus:ring-0 text-gray-700 font-medium cursor-pointer" required>
-                            </div>
-                            <!-- Note: No glowing buttons -->
-                            <button type="submit" name="tgl_plgr" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-gray-900 font-bold hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-                                <i class="bi bi-search"></i> Cari
-                            </button>
-                        </form>
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <!-- Search Form -->
+                            <form action="" method="post" class="flex flex-col sm:flex-row items-end sm:items-center gap-3 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">
+                                <div class="flex items-center w-full">
+                                    <label for="tanggal" class="text-sm font-semibold text-gray-600 pl-3 pr-2 hidden sm:block whitespace-nowrap">Tanggal:</label>
+                                    <input type="date" id="tanggal" name="tanggal" value="<?= $tgl_plgr; ?>" class="w-full sm:w-auto px-3 py-2 text-sm border-none bg-transparent focus:ring-0 text-gray-700 font-medium cursor-pointer" required>
+                                </div>
+                                <button type="submit" name="tgl_plgr" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-gray-900 font-bold hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                                    <i class="bi bi-search"></i> Cari
+                                </button>
+                            </form>
+                            
+                            <?php if (!isset($kosong) && !empty($plgr_siswa)) : ?>
+                            <form action="export_pdf.php" method="post" target="_blank" class="flex">
+                                <input type="hidden" name="tanggal" value="<?= $tgl_plgr; ?>">
+                                <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 whitespace-nowrap">
+                                    <i class="bi bi-file-earmark-pdf-fill"></i> Export PDF
+                                </button>
+                            </form>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
                 
@@ -294,7 +307,8 @@ if (isset($_POST["tgl_plgr"])) {
             </div>
             
             <div class="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm font-medium">&copy; Copyright <?= date('Y') ?>, RPL A0204. All rights reserved.</p>
+                <p class="text-gray-400 text-sm font-medium">&copy; Copyright 2022, RPL A0204. All rights reserved.</p>
+                <p class="text-gray-400 text-sm font-medium">updated 2026, RPL R2809.</p>
             </div>
         </div>
     </footer>
@@ -316,6 +330,8 @@ if (isset($_POST["tgl_plgr"])) {
                     userMenu.classList.add('hidden');
                 }
             }
+        });
+
         });
     </script>
 </body>
