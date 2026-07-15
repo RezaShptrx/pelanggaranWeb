@@ -273,7 +273,7 @@ if (isset($_POST["login"])) {
                     <img src="../img/logosmk12.png" alt="Logo" class="w-10 h-10 object-contain">
                     <h5 class="font-serif font-bold text-lg text-gray-900">OSIS SMKN 12 JAKARTA</h5>
                 </div>
-                <p class="text-gray-400 text-sm font-medium">&copy; Copyright 2022, RPL A0204. All rights reserved.</p>
+                <p class="text-gray-400 text-sm font-medium">&copy; Copyright <?= date('Y') ?>, RPL A0204. All rights reserved.</p>
             </div>
         </div>
     </footer>

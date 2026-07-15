@@ -285,7 +285,7 @@ $ktnprestasi = query("SELECT * FROM ket_prestasi");
             </div>
             
             <div class="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm font-medium">&copy; Copyright 2022, RPL A0204. All rights reserved.</p>
+                <p class="text-gray-400 text-sm font-medium">&copy; Copyright <?= date('Y') ?>, RPL A0204. All rights reserved.</p>
             </div>
         </div>
     </footer>

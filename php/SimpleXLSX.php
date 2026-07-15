@@ -8,11 +8,11 @@ use SimpleXMLElement;
  *    SimpleXLSX php class
  *    MS Excel 2007+ workbooks reader
  *
- * Copyright (c) 2012 - 2022 SimpleXLSX
+ * Copyright (c) 2012 - <?= date('Y') ?> SimpleXLSX
  *
  * @category   SimpleXLSX
  * @package    SimpleXLSX
- * @copyright  Copyright (c) 2012 - 2022 SimpleXLSX (https://github.com/shuchkin/simplexlsx/)
+ * @copyright  Copyright (c) 2012 - <?= date('Y') ?> SimpleXLSX (https://github.com/shuchkin/simplexlsx/)
  * @license    MIT
  */
 
