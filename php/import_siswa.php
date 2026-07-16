@@ -15,7 +15,7 @@ if (isset($_POST["upload"])) {
         $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
         if (in_array($file_ext, $allowed_ext)) {
-            if ($xlsx = SimpleXLSX::parse($_FILES['file_excel']['tmp_name'])) {
+            if ($xlsx = \Shuchkin\SimpleXLSX::parse($_FILES['file_excel']['tmp_name'])) {
                 $rows = $xlsx->rows();
                 $berhasil = 0;
                 $gagal = 0;
@@ -61,7 +61,7 @@ if (isset($_POST["upload"])) {
                       document.location.href = './siswa.php';
                       </script>";
             } else {
-                $error = SimpleXLSX::parseError();
+                $error = \Shuchkin\SimpleXLSX::parseError();
                 echo "<script>
                       alert('Gagal membaca file Excel: $error');
                       document.location.href = './siswa.php';
