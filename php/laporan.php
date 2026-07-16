@@ -331,8 +331,6 @@ if (isset($_POST["tgl_plgr"])) {
                 }
             }
         });
-
-        });
     </script>
 </body>
 </html>

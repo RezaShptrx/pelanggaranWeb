@@ -81,7 +81,7 @@ if (isset($_POST["submit"])) {
 
 ?>
 
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
