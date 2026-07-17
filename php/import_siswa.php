@@ -28,16 +28,33 @@ if (isset($_POST["upload"])) {
                     if(empty($row[0]) && empty($row[1]) && empty($row[2])) continue;
 
                     $kelas = $row[0];
-                    $jurusan = $row[1];
+                    $kode_jurusan = htmlspecialchars($row[1]);
                     $nis = htmlspecialchars($row[2]);
                     $nama = htmlspecialchars(ucwords($row[3]));
                     $email = htmlspecialchars($row[4]);
                     $role = htmlspecialchars(strtolower($row[5]));
                     
                     // Validasi minimal
-                    if(empty($nis) || empty($nama)) {
+                    if(empty($nis) || empty($nama) || empty($kode_jurusan) || empty($kelas)) {
                         $gagal++;
                         continue;
+                    }
+
+                    // Cari id_jurusan berdasarkan kode_jurusan dan id_kelas
+                    $cek_jurusan = mysqli_query($conn, "SELECT id_jurusan FROM jurusan WHERE kode_jurusan = '$kode_jurusan' AND id_kelas = '$kelas'");
+                    if (mysqli_num_rows($cek_jurusan) > 0) {
+                        $dt_jurusan = mysqli_fetch_assoc($cek_jurusan);
+                        $jurusan = $dt_jurusan['id_jurusan'];
+                    } else {
+                        // Coba cari tanpa id_kelas jika tidak ketemu
+                        $cek_jurusan2 = mysqli_query($conn, "SELECT id_jurusan FROM jurusan WHERE kode_jurusan = '$kode_jurusan'");
+                        if (mysqli_num_rows($cek_jurusan2) > 0) {
+                            $dt_jurusan2 = mysqli_fetch_assoc($cek_jurusan2);
+                            $jurusan = $dt_jurusan2['id_jurusan'];
+                        } else {
+                            $gagal++;
+                            continue; // Lewati jika kode jurusan tidak ditemukan
+                        }
                     }
 
                     // Cek NIS sudah ada atau belum

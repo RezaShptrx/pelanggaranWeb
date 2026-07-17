@@ -11,8 +11,8 @@ $type = isset($_GET['type']) ? $_GET['type'] : '';
 
 if ($type === 'siswa') {
     $data = [
-        ['ID Kelas', 'ID Jurusan', 'NIS', 'Nama Siswa', 'Email', 'Role'],
-        ['1', '1', '12345678', 'Contoh Siswa', 'siswa@contoh.com', 'siswa']
+        ['ID Kelas', 'Kode Jurusan', 'NIS', 'Nama Siswa', 'Email', 'Role'],
+        ['1', 'RPL', '12345678', 'Contoh Siswa', 'siswa@contoh.com', 'siswa']
     ];
     $filename = 'Template_Import_Siswa.xlsx';
 } elseif ($type === 'guru') {

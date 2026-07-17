@@ -420,7 +420,7 @@ if (isset($_POST["tambah"])) {
                                 Baris pertama adalah header/judul kolom (akan otomatis diabaikan sistem).<br><br>
                                 <ul class="list-disc list-inside">
                                     <li><strong>Kolom 1:</strong> ID Kelas (Angka)</li>
-                                    <li><strong>Kolom 2:</strong> ID Jurusan (Angka)</li>
+                                    <li><strong>Kolom 2:</strong> Kode Jurusan (Misal : RPL-1)</li>
                                     <li><strong>Kolom 3:</strong> NIS (Angka, misal 12345)</li>
                                     <li><strong>Kolom 4:</strong> Nama Siswa</li>
                                     <li><strong>Kolom 5:</strong> Email</li>

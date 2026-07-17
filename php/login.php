@@ -181,11 +181,19 @@ if (isset($_POST["login"])) {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-24 items-center">
                 <!-- Logo -->
-                <a href="../index.php" class="flex items-center gap-4 group mx-auto md:mx-0">
+                <a href="../index.php" class="flex items-center gap-4 group">
                     <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center p-2 shadow-inner group-hover:shadow-md transition-all">
                         <img src="../img/logosmk12.png" alt="Logo" class="w-full h-full object-contain">
                     </div>
-                    <span class="font-serif font-bold text-2xl tracking-wide text-gray-900 group-hover:text-primary transition-colors">OSIS SMKN 12</span>
+                    <span class="font-serif font-bold text-2xl tracking-wide text-gray-900 group-hover:text-primary transition-colors hidden sm:block">OSIS SMKN 12</span>
+                </a>
+
+                <!-- Install App Button -->
+                <a href="#" class="flex items-center gap-2 px-4 md:px-5 py-2.5 bg-secondary hover:bg-hover hover:text-white text-white rounded-xl transition-all font-bold text-sm shadow-sm hover:shadow-md">
+                    <div class="bg-white rounded-full p-1 shadow-sm flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#3DDC84" class="w-4 h-4"><path d="M420.22 167.5l42.4-73.43a8.16 8.16 0 0 0-3-11.13 8.16 8.16 0 0 0-11.12 3l-43.2 74.88c-32.96-15.02-69.58-23.4-108.3-23.4s-75.34 8.38-108.3 23.4l-43.2-74.88a8.16 8.16 0 0 0-11.12-3 8.16 8.16 0 0 0-3 11.13l42.4 73.43C124.7 197.8 89.04 246.5 76 304h424c-13.04-57.5-48.7-106.2-99.78-136.5zM186 256a22 22 0 1 1-44 0 22 22 0 0 1 44 0zm248 0a22 22 0 1 1-44 0 22 22 0 0 1 44 0zm117 84H25v120c0 17.67 14.33 32 32 32h21v48c0 26.51 21.49 48 48 48h16c26.51 0 48-21.49 48-48v-48h196v48c0 26.51 21.49 48 48 48h16c26.51 0 48-21.49 48-48v-48h21c17.67 0 32-14.33 32-32V340z"/></svg>
+                    </div>
+                    <span class="sm:block">Install App</span>
                 </a>
             </div>
         </div>
