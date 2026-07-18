@@ -127,6 +127,20 @@ $ktnprestasi = query("SELECT * FROM ket_prestasi");
                         
                         <div id="prestasi-content" class="accordion-content expanded bg-white border-t border-gray-100">
                             <div class="p-4 sm:p-6 bg-gray-50/30">
+
+                                <?php
+                                $batas_prestasi = 25;
+                                $halaman_prestasi = isset($_GET["halaman_prestasi"]) ? (int)$_GET["halaman_prestasi"] : 1;
+                                $halaman_awal_prestasi = ($halaman_prestasi > 1) ? ($halaman_prestasi * $batas_prestasi) - $batas_prestasi : 0;
+                                $previous_prestasi = $halaman_prestasi - 1;
+                                $next_prestasi = $halaman_prestasi + 1;
+
+                                $jumlah_data_prestasi = count($ktnprestasi);
+                                $total_halaman_prestasi = ceil($jumlah_data_prestasi / $batas_prestasi);
+
+                                $data_ktnprestasi = query("SELECT * FROM ket_prestasi ORDER BY poin_prestasi DESC LIMIT $halaman_awal_prestasi, $batas_prestasi");
+                                ?>
+
                                 <!-- Desktop Table -->
                                 <div class="hidden md:block overflow-x-auto border border-gray-200 rounded-xl bg-white shadow-sm">
                                     <table class="w-full text-left border-collapse">
@@ -138,8 +152,8 @@ $ktnprestasi = query("SELECT * FROM ket_prestasi");
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-100">
-                                            <?php $n = 1; ?>
-                                            <?php foreach ($ktnprestasi as $prestasi) : ?>
+                                            <?php $n = $halaman_awal_prestasi + 1; ?>
+                                            <?php foreach ($data_ktnprestasi as $prestasi) : ?>
                                                 <tr class="hover:bg-gray-50/80 transition-colors">
                                                     <td class="py-4 px-6 text-sm text-gray-500 text-center font-medium"><?= $n++; ?></td>
                                                     <td class="py-4 px-6 text-sm text-gray-800 font-medium"><?= ucfirst($prestasi["det_prestasi"]); ?></td>
@@ -156,8 +170,8 @@ $ktnprestasi = query("SELECT * FROM ket_prestasi");
                                 
                                 <!-- Mobile Cards -->
                                 <div class="md:hidden space-y-3">
-                                    <?php $n = 1; ?>
-                                    <?php foreach ($ktnprestasi as $prestasi) : ?>
+                                    <?php $n = $halaman_awal_prestasi + 1; ?>
+                                    <?php foreach ($data_ktnprestasi as $prestasi) : ?>
                                     <div class="bg-white border border-gray-200 p-4 rounded-xl shadow-sm flex flex-col gap-3 relative overflow-hidden">
                                         <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
                                         <div class="flex justify-between items-start pl-2">
@@ -168,6 +182,34 @@ $ktnprestasi = query("SELECT * FROM ket_prestasi");
                                     </div>
                                     <?php endforeach; ?>
                                 </div>
+
+                                <!-- Pagination Prestasi -->
+                                <?php if($total_halaman_prestasi > 1): ?>
+                                <div class="mt-8 flex justify-center overflow-x-auto pb-4 custom-scrollbar">
+                                    <nav class="inline-flex rounded-xl shadow-sm -space-x-px w-max" aria-label="Pagination">
+                                        <?php 
+                                        $halaman_param = isset($_GET['halaman']) ? '&halaman=' . $_GET['halaman'] : '';
+                                        ?>
+                                        <a <?php if ($halaman_prestasi > 1) { echo "href='?halaman_prestasi=$previous_prestasi" . $halaman_param . "'"; } ?> class="relative inline-flex items-center px-4 py-2 rounded-l-xl border border-gray-200 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
+                                            <span class="sr-only">Previous</span>
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                        
+                                        <?php for ($i = 1; $i <= $total_halaman_prestasi; $i++) : ?>
+                                            <?php if($i == $halaman_prestasi): ?>
+                                                <a href="?halaman_prestasi=<?= $i; ?><?= $halaman_param; ?>" class="relative inline-flex items-center px-4 py-2 border border-primary bg-primary text-sm font-bold text-white z-10"><?= $i; ?></a>
+                                            <?php else: ?>
+                                                <a href="?halaman_prestasi=<?= $i; ?><?= $halaman_param; ?>" class="relative inline-flex items-center px-4 py-2 border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"><?= $i; ?></a>
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                        
+                                        <a <?php if ($halaman_prestasi < $total_halaman_prestasi) { echo "href='?halaman_prestasi=$next_prestasi" . $halaman_param . "'"; } ?> class="relative inline-flex items-center px-4 py-2 rounded-r-xl border border-gray-200 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
+                                            <span class="sr-only">Next</span>
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </nav>
+                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
