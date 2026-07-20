@@ -70,9 +70,10 @@ if (isset($_POST["upload"])) {
                     
                     if(mysqli_query($conn, $query)) {
                         $berhasil++;
+                        $inserted_id_siswa = mysqli_insert_id($conn);
                         
                         if(!empty($nama_orang_tua) || !empty($nomor_whatsapp)) {
-                            mysqli_query($conn, "INSERT INTO orang_tua (nis, nama_orang_tua, nomor_whatsapp) VALUES ('$nis', '$nama_orang_tua', '$nomor_whatsapp')");
+                            mysqli_query($conn, "INSERT INTO orang_tua (id_siswa, nama_orang_tua, nomor_whatsapp) VALUES ('$inserted_id_siswa', '$nama_orang_tua', '$nomor_whatsapp')");
                         }
                     } else {
                         $gagal++;

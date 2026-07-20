@@ -92,8 +92,9 @@ function tambah_siswa($data)
                 
                 
     if (mysqli_affected_rows($conn) > 0) {
+        $inserted_id_siswa = mysqli_insert_id($conn);
         if (!empty($nama_orang_tua) || !empty($nomor_whatsapp)) {
-            mysqli_query($conn, "INSERT INTO orang_tua (nis, nama_orang_tua, nomor_whatsapp) VALUES ('$nis', '$nama_orang_tua', '$nomor_whatsapp')");
+            mysqli_query($conn, "INSERT INTO orang_tua (id_siswa, nama_orang_tua, nomor_whatsapp) VALUES ('$inserted_id_siswa', '$nama_orang_tua', '$nomor_whatsapp')");
         }
         return 1;
     }
@@ -329,10 +330,6 @@ function ubah_siswa($data)
         return false;
     }
 
-    // Ambil nis lama sebelum diubah, untuk keperluan update tabel orang_tua
-    $siswa_lama = query("SELECT nis FROM siswa WHERE id_siswa = $id");
-    $nis_lama = !empty($siswa_lama) ? $siswa_lama[0]["nis"] : $nis;
-
     // Update tabel siswa
     mysqli_query($conn, "UPDATE siswa SET
                  id_kelas = '$kelas',
@@ -347,11 +344,11 @@ function ubah_siswa($data)
     $affected_siswa = mysqli_affected_rows($conn);
 
     // Update atau Insert tabel orang_tua
-    $cek_ortu = query("SELECT * FROM orang_tua WHERE nis = '$nis_lama'");
+    $cek_ortu = query("SELECT * FROM orang_tua WHERE id_siswa = $id");
     if (empty($cek_ortu)) {
-        mysqli_query($conn, "INSERT INTO orang_tua (nis, nama_orang_tua, nomor_whatsapp) VALUES ('$nis', '$nama_orang_tua', '$nomor_whatsapp')");
+        mysqli_query($conn, "INSERT INTO orang_tua (id_siswa, nama_orang_tua, nomor_whatsapp) VALUES ('$id', '$nama_orang_tua', '$nomor_whatsapp')");
     } else {
-        mysqli_query($conn, "UPDATE orang_tua SET nis = '$nis', nama_orang_tua = '$nama_orang_tua', nomor_whatsapp = '$nomor_whatsapp' WHERE nis = '$nis_lama'");
+        mysqli_query($conn, "UPDATE orang_tua SET nama_orang_tua = '$nama_orang_tua', nomor_whatsapp = '$nomor_whatsapp' WHERE id_siswa = $id");
     }
     
     $affected_ortu = mysqli_affected_rows($conn);

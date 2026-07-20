@@ -31,7 +31,7 @@ if (!$id) {
 $siswa = query("SELECT * FROM siswa WHERE id_siswa = $id")[0];
 $kelas_sekolah = query("SELECT * FROM kelas");
 $nis = $siswa["nis"];
-$orang_tua = query("SELECT * FROM orang_tua WHERE nis = '$nis'");
+$orang_tua = query("SELECT * FROM orang_tua WHERE id_siswa = $id");
 $ot = !empty($orang_tua) ? $orang_tua[0] : [
     "nama_orang_tua" => "",
     "nomor_whatsapp" => "",
