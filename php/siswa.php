@@ -381,6 +381,16 @@ if (isset($_POST["tambah"])) {
                                 </div>
                                 
                                 <div>
+                                    <label for="nama_orang_tua" class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Orang Tua</label>
+                                    <input type="text" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="nama_orang_tua" name="nama_orang_tua" placeholder="Nama lengkap orang tua..." required autocomplete="off">
+                                </div>
+                                
+                                <div>
+                                    <label for="nomor_whatsapp" class="block text-sm font-semibold text-gray-700 mb-1.5">Nomor WA Orang Tua</label>
+                                    <input type="text" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="nomor_whatsapp" name="nomor_whatsapp" placeholder="Contoh: 081234567890" required autocomplete="off">
+                                </div>
+                                
+                                <div>
                                     <label for="foto" class="block text-sm font-semibold text-gray-700 mb-1.5">Foto (Opsional)</label>
                                     <input type="file" class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer border border-gray-200 rounded-xl transition-colors" id="foto" name="foto">
                                 </div>

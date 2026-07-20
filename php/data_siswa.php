@@ -209,9 +209,15 @@ if (isset($_POST["tambah_prestasi"])) {
                                     <div class="grid grid-cols-3 gap-4">
                                         <dt class="font-bold text-gray-500 col-span-1">Poin</dt>
                                         <dd class="col-span-2">
-                                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-black border border-primary/20">
-                                                <?= $siswa["jmlh_poin"]; ?>
-                                            </span>
+                                            <?php if ($siswa["jmlh_poin"] >= 0) : ?>
+                                                <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-black border border-primary/20">
+                                                    <?= $siswa["jmlh_poin"]; ?>
+                                                </span>
+                                            <?php else : ?>
+                                                <span class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-red-50 text-red-700 text-sm font-bold border border-red-200">
+                                                    Drop Out
+                                                </span>
+                                            <?php endif; ?>
                                         </dd>
                                     </div>
                                 </dl>

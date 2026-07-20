@@ -30,6 +30,13 @@ if (!$id) {
 
 $siswa = query("SELECT * FROM siswa WHERE id_siswa = $id")[0];
 $kelas_sekolah = query("SELECT * FROM kelas");
+$nis = $siswa["nis"];
+$orang_tua = query("SELECT * FROM orang_tua WHERE nis = '$nis'");
+$ot = !empty($orang_tua) ? $orang_tua[0] : [
+    "nama_orang_tua" => "",
+    "nomor_whatsapp" => "",
+    "id_skorkita_wa" => ""
+];
 
 
 if (isset($_POST["ubah"])) {
@@ -199,6 +206,20 @@ if (isset($_POST["ubah"])) {
                         <div>
                             <label for="email" class="block text-sm font-bold text-gray-700 mb-2">Email</label>
                             <input type="email" id="email" name="email" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" required autocomplete="off" value="<?= $siswa["email"]; ?>" placeholder="email@gmail.com">
+                        </div>
+
+                        <h3 class="text-lg font-bold text-gray-900 mt-8 mb-4 border-b border-gray-100 pb-2">Data Orang Tua</h3>
+                        
+                        <!-- Nama Orang Tua -->
+                        <div>
+                            <label for="nama_orang_tua" class="block text-sm font-bold text-gray-700 mb-2">Nama Orang Tua</label>
+                            <input type="text" id="nama_orang_tua" name="nama_orang_tua" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" required autocomplete="off" value="<?= $ot["nama_orang_tua"]; ?>" placeholder="Nama lengkap orang tua">
+                        </div>
+                        
+                        <!-- Nomor WhatsApp -->
+                        <div>
+                            <label for="nomor_whatsapp" class="block text-sm font-bold text-gray-700 mb-2">Nomor WhatsApp</label>
+                            <input type="text" id="nomor_whatsapp" name="nomor_whatsapp" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" required autocomplete="off" value="<?= $ot["nomor_whatsapp"]; ?>" placeholder="Contoh: 081234567890">
                         </div>
                         
                         <!-- Foto -->

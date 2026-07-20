@@ -33,6 +33,8 @@ if (isset($_POST["upload"])) {
                     $nama = htmlspecialchars(ucwords($row[3]));
                     $email = htmlspecialchars($row[4]);
                     $role = htmlspecialchars(strtolower($row[5]));
+                    $nama_orang_tua = isset($row[6]) ? htmlspecialchars(ucwords($row[6])) : '';
+                    $nomor_whatsapp = isset($row[7]) ? htmlspecialchars($row[7]) : '';
                     
                     // Validasi minimal
                     if(empty($nis) || empty($nama) || empty($kode_jurusan) || empty($kelas)) {
@@ -68,6 +70,10 @@ if (isset($_POST["upload"])) {
                     
                     if(mysqli_query($conn, $query)) {
                         $berhasil++;
+                        
+                        if(!empty($nama_orang_tua) || !empty($nomor_whatsapp)) {
+                            mysqli_query($conn, "INSERT INTO orang_tua (nis, nama_orang_tua, nomor_whatsapp) VALUES ('$nis', '$nama_orang_tua', '$nomor_whatsapp')");
+                        }
                     } else {
                         $gagal++;
                     }

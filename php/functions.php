@@ -1,4 +1,7 @@
 <?php
+// Set timezone
+date_default_timezone_set('Asia/Jakarta');
+
 // koneksi ke database
 $conn = mysqli_connect("localhost", "root", "root", "pelanggaran_siswa");
 
@@ -30,7 +33,7 @@ function lapor($data, $pelapor)
     $jmlh_poin_siswa = query("SELECT jmlh_poin FROM siswa WHERE id_siswa=$id_pelanggar")[0]["jmlh_poin"];
     $poin_akhir = $jmlh_poin_siswa - $jmlh_poin_plgr;
 
-    $query = "INSERT INTO pelanggaran_siswa VALUES ('','$id_pelanggar', '$pelapor', '$pelanggaran', '$jmlh_poin_plgr','$waktu_pelanggaran')";
+    $query = "INSERT INTO pelanggaran_siswa (`id_pelanggar`, `id_pelapor`, `id_pelanggaran`, `poin_berkurang`, `waktu_pelanggaran`) VALUES ('$id_pelanggar', '$pelapor', '$pelanggaran', '$jmlh_poin_plgr','$waktu_pelanggaran')";
     mysqli_query($conn, $query);
 
     mysqli_query($conn, "UPDATE siswa SET jmlh_poin=$poin_akhir WHERE id_siswa=$id_pelanggar");
@@ -45,7 +48,7 @@ function tambah_guru($data)
     $nip = htmlspecialchars($data["nip"]);
     $nama = htmlspecialchars(ucwords($data["nama"]));
     $email = htmlspecialchars($data["email"]);
-    $role = htmlspecialchars(($data["role"]));
+    $role = htmlspecialchars($data["role"]);
 
     $query = "INSERT INTO guru_pembina (`nip`, `nama_guru`, `email`, `role`, `password`) VALUES ('$nip', '$nama', '$email', '$role', '$nip')";
 
@@ -62,8 +65,12 @@ function tambah_siswa($data)
     $jurusan = $data["jurusan"];
     $nis = htmlspecialchars($data["nis"]);
     $nama = htmlspecialchars(ucwords($data["nama"]));
-    $role = htmlspecialchars(($data["role"]));
+    $role = htmlspecialchars($data["role"]);
     $email = htmlspecialchars($data["email"]);
+
+    // Data Orang Tua
+    $nama_orang_tua = htmlspecialchars(ucwords($data["nama_orang_tua"] ?? ''));
+    $nomor_whatsapp = htmlspecialchars($data["nomor_whatsapp"] ?? '');
 
     $cek_nis = mysqli_query($conn, "SELECT * FROM siswa WHERE nis = $nis");
 
@@ -81,9 +88,17 @@ function tambah_siswa($data)
     }
 
 
-    mysqli_query($conn, "INSERT INTO siswa (`id_kelas`, `id_jurusan`, `nis`, `nama_siswa`, `email`, `jmlh_poin`, `role`, `foto`, `password`) VALUES ('$kelas', '$jurusan', '$nis', '$nama', '$email', '0', '$role', '$foto', '$nis')");
-
-    return mysqli_affected_rows($conn);
+    mysqli_query($conn, "INSERT INTO siswa (`id_kelas`, `id_jurusan`, `nis`, `nama_siswa`, `email`, `jmlh_poin`, `role`, `foto`, `password`) VALUES ('$kelas', '$jurusan', '$nis', '$nama', '$email', '100', '$role', '$foto', '$nis')");
+                
+                
+    if (mysqli_affected_rows($conn) > 0) {
+        if (!empty($nama_orang_tua) || !empty($nomor_whatsapp)) {
+            mysqli_query($conn, "INSERT INTO orang_tua (nis, nama_orang_tua, nomor_whatsapp) VALUES ('$nis', '$nama_orang_tua', '$nomor_whatsapp')");
+        }
+        return 1;
+    }
+    
+    return 0;
 }
 
 function tambah_pelanggaran($data)
@@ -299,6 +314,10 @@ function ubah_siswa($data)
     $nama = htmlspecialchars(ucwords($data["nama"]));
     $email = htmlspecialchars($data["email"]);
     $fotoLama = $data["fotoLama"];
+    
+    // Data Orang Tua
+    $nama_orang_tua = htmlspecialchars(ucwords($data["nama_orang_tua"] ?? ''));
+    $nomor_whatsapp = htmlspecialchars($data["nomor_whatsapp"] ?? '');
 
     if ($_FILES["foto"]["error"] === 4) {
         $foto = $fotoLama;
@@ -310,6 +329,11 @@ function ubah_siswa($data)
         return false;
     }
 
+    // Ambil nis lama sebelum diubah, untuk keperluan update tabel orang_tua
+    $siswa_lama = query("SELECT nis FROM siswa WHERE id_siswa = $id");
+    $nis_lama = !empty($siswa_lama) ? $siswa_lama[0]["nis"] : $nis;
+
+    // Update tabel siswa
     mysqli_query($conn, "UPDATE siswa SET
                  id_kelas = '$kelas',
                  id_jurusan = '$jurusan',
@@ -319,8 +343,20 @@ function ubah_siswa($data)
                  foto = '$foto'
                  WHERE id_siswa = $id
                  ");
+    
+    $affected_siswa = mysqli_affected_rows($conn);
 
-    return mysqli_affected_rows($conn);
+    // Update atau Insert tabel orang_tua
+    $cek_ortu = query("SELECT * FROM orang_tua WHERE nis = '$nis_lama'");
+    if (empty($cek_ortu)) {
+        mysqli_query($conn, "INSERT INTO orang_tua (nis, nama_orang_tua, nomor_whatsapp) VALUES ('$nis', '$nama_orang_tua', '$nomor_whatsapp')");
+    } else {
+        mysqli_query($conn, "UPDATE orang_tua SET nis = '$nis', nama_orang_tua = '$nama_orang_tua', nomor_whatsapp = '$nomor_whatsapp' WHERE nis = '$nis_lama'");
+    }
+    
+    $affected_ortu = mysqli_affected_rows($conn);
+
+    return ($affected_siswa > 0 || $affected_ortu > 0) ? 1 : 0;
 }
 
 function ubah_password($data, $id)
@@ -425,7 +461,7 @@ function reset_poin()
 {
     global $conn;
 
-    mysqli_query($conn, "UPDATE siswa SET `jmlh_poin` = 0");
+    mysqli_query($conn, "UPDATE siswa SET `jmlh_poin` = 100");
 
     return mysqli_affected_rows($conn);
 }
