@@ -372,7 +372,7 @@ function ubah_password($data, $id)
         $passwordLama = mysqli_query($conn, "SELECT `password` FROM guru_pembina WHERE id_guru = $id")->fetch_assoc();
         if ($pw_lama === $passwordLama["password"]) {
             if ($pw_baru === $con_pw_baru) {
-                mysqli_query($conn, "UPDATE guru_pembina SET `password` = $pw_baru WHERE id_guru = $id");
+                mysqli_query($conn, "UPDATE guru_pembina SET `password` = '$pw_baru' WHERE id_guru = $id");
             } else {
                 echo "<script>
                   alert('Konfirmasi password baru berbeda!');
@@ -389,7 +389,7 @@ function ubah_password($data, $id)
         $passwordLama = mysqli_query($conn, "SELECT `password` FROM siswa WHERE id_siswa = $id")->fetch_assoc();
         if ($pw_lama === $passwordLama["password"]) {
             if ($pw_baru === $con_pw_baru) {
-                mysqli_query($conn, "UPDATE siswa SET `password` = $pw_baru WHERE id_siswa = $id");
+                mysqli_query($conn, "UPDATE siswa SET `password` = '$pw_baru' WHERE id_siswa = $id");
             } else {
                 echo "<script>
                   alert('Konfirmasi password baru berbeda!');
@@ -403,6 +403,16 @@ function ubah_password($data, $id)
             return false;
         }
     }
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubah_email($data, $id)
+{
+    global $conn;
+    $email_baru = htmlspecialchars($data["email_baru"]);
+
+    mysqli_query($conn, "UPDATE siswa SET `email` = '$email_baru' WHERE id_siswa = $id");
 
     return mysqli_affected_rows($conn);
 }

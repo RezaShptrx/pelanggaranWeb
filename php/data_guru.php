@@ -248,17 +248,32 @@ $guru = query("SELECT * FROM guru_pembina WHERE id_guru = $id")[0];
                                 
                                 <div>
                                     <label for="pw_lama" class="block text-sm font-semibold text-gray-700 mb-1.5">Password Lama</label>
-                                    <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="pw_lama" placeholder="Masukkan password lama..." name="pw_lama" required autocomplete="off">
+                                    <div class="relative">
+                                        <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 pr-10 border outline-none transition-all" id="pw_lama" placeholder="Masukkan password lama..." name="pw_lama" required autocomplete="off">
+                                        <button type="button" onclick="togglePassword('pw_lama', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                            <i class="bi bi-eye text-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <div>
                                     <label for="pw_baru" class="block text-sm font-semibold text-gray-700 mb-1.5">Password Baru</label>
-                                    <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="pw_baru" name="pw_baru" required placeholder="Masukkan password baru..." autocomplete="off">
+                                    <div class="relative">
+                                        <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 pr-10 border outline-none transition-all" id="pw_baru" name="pw_baru" required placeholder="Masukkan password baru..." autocomplete="off">
+                                        <button type="button" onclick="togglePassword('pw_baru', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                            <i class="bi bi-eye text-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <div>
                                     <label for="con_pw_baru" class="block text-sm font-semibold text-gray-700 mb-1.5">Konfirmasi Password Baru</label>
-                                    <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="con_pw_baru" name="con_pw_baru" required placeholder="Ulangi password baru..." autocomplete="off">
+                                    <div class="relative">
+                                        <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 pr-10 border outline-none transition-all" id="con_pw_baru" name="con_pw_baru" required placeholder="Ulangi password baru..." autocomplete="off">
+                                        <button type="button" onclick="togglePassword('con_pw_baru', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                            <i class="bi bi-eye text-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -304,6 +319,20 @@ $guru = query("SELECT * FROM guru_pembina WHERE id_guru = $id")[0];
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.body.style.overflow = '';
+        }
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
         }
     </script>
 </body>

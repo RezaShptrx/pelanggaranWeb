@@ -104,15 +104,56 @@ if (isset($_POST["tambah_prestasi"])) {
 </head>
 <body class="bg-[#fcfcfd] text-gray-800 font-sans antialiased selection:bg-primary selection:text-white flex flex-col min-h-screen">
 
-    <!-- Top Action Bar -->
-    <div class="w-full flex justify-end gap-3 p-6">
-        <a href="./ketentuan_siswa.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-secondary text-white hover:bg-hover font-bold transition-colors shadow-sm">
-            <i class="bi bi-journal-text"></i> Ketentuan
-        </a>
-        <a href="./logout.php" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 font-bold transition-colors shadow-sm">
-            <i class="bi bi-box-arrow-right"></i> Keluar
-        </a>
-    </div>
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-24 items-center">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-4 group cursor-default">
+                    <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center p-2 shadow-inner group-hover:shadow-md transition-all">
+                        <img src="../img/logosmk12.png" alt="Logo" class="w-full h-full object-contain">
+                    </div>
+                    <span class="font-serif font-bold text-2xl tracking-wide text-gray-900 group-hover:text-primary transition-colors">OSIS SMKN 12</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="./ketentuan_siswa.php" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors py-2 px-1">Ketentuan</a>
+                    
+                    <!-- Dropdown -->
+                    <div class="relative ml-4" id="userMenuContainer">
+                        <button onclick="toggleDropdown('userMenu')" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-primary focus:outline-none">
+                            <i class="bi bi-list text-xl text-gray-600"></i>
+                        </button>
+                        <div id="userMenu" class="hidden absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 py-2 z-50 transform origin-top-right transition-all">
+                            <a href="#" onclick="openModal('ganti_pw')" class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium"><i class="bi bi-key me-2"></i>Ganti Password</a>
+                            <a href="#" onclick="openModal('ganti_email')" class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium"><i class="bi bi-envelope me-2"></i>Ganti Email</a>
+                            <a href="#" onclick="openModal('ganti_foto')" class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium"><i class="bi bi-image me-2"></i>Ganti Foto</a>
+                            <div class="border-t border-gray-100 my-1"></div>
+                            <a href="./logout.php" class="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors font-medium"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleDropdown('mobileMenu')" class="text-gray-500 hover:text-gray-900 p-2 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
+                        <i class="bi bi-list text-3xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Panel -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 pt-4 pb-6 space-y-2 shadow-xl">
+            <a href="./ketentuan_siswa.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Ketentuan</a>
+            <div class="border-t border-gray-100 my-4 pt-2"></div>
+            <a href="#" onclick="openModal('ganti_pw')" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium"><i class="bi bi-key me-2"></i>Ganti Password</a>
+            <a href="#" onclick="openModal('ganti_email')" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium"><i class="bi bi-envelope me-2"></i>Ganti Email</a>
+            <a href="#" onclick="openModal('ganti_foto')" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium"><i class="bi bi-image me-2"></i>Ganti Foto</a>
+            <a href="./logout.php" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-bold"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+        </div>
+    </nav>
 
     <!-- Main Content -->
     <main class="flex-grow pt-12 pb-24">
@@ -380,23 +421,38 @@ if (isset($_POST["tambah_prestasi"])) {
                                 
                                 <div>
                                     <label for="pw_lama" class="block text-sm font-semibold text-gray-700 mb-1.5">Password Lama</label>
-                                    <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="pw_lama" placeholder="Masukkan password lama..." name="pw_lama" required autocomplete="off">
+                                    <div class="relative">
+                                        <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 pr-10 border outline-none transition-all" id="pw_lama" placeholder="Masukkan password lama..." name="pw_lama" required autocomplete="off">
+                                        <button type="button" onclick="togglePassword('pw_lama', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                            <i class="bi bi-eye text-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <div>
                                     <label for="pw_baru" class="block text-sm font-semibold text-gray-700 mb-1.5">Password Baru</label>
-                                    <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="pw_baru" name="pw_baru" required placeholder="Masukkan password baru..." autocomplete="off">
+                                    <div class="relative">
+                                        <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 pr-10 border outline-none transition-all" id="pw_baru" name="pw_baru" required placeholder="Masukkan password baru..." autocomplete="off">
+                                        <button type="button" onclick="togglePassword('pw_baru', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                            <i class="bi bi-eye text-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <div>
                                     <label for="con_pw_baru" class="block text-sm font-semibold text-gray-700 mb-1.5">Konfirmasi Password Baru</label>
-                                    <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="con_pw_baru" name="con_pw_baru" required placeholder="Ulangi password baru..." autocomplete="off">
+                                    <div class="relative">
+                                        <input type="password" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 pr-10 border outline-none transition-all" id="con_pw_baru" name="con_pw_baru" required placeholder="Ulangi password baru..." autocomplete="off">
+                                        <button type="button" onclick="togglePassword('con_pw_baru', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                            <i class="bi bi-eye text-lg"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="bg-gray-50/80 px-6 py-4 sm:flex sm:flex-row-reverse">
-                        <button type="submit" form="form_ganti_pw" name="ganti" class="inline-flex w-full justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-secondary sm:ml-3 sm:w-auto transition-colors">Simpan</button>
+                        <button type="submit" form="form_ganti_pw" name="ganti" class="inline-flex w-full justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-primary sm:ml-3 sm:w-auto transition-colors">Simpan</button>
                         <button type="button" onclick="closeModal('ganti_pw')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors">Batal</button>
                     </div>
                 </div>
@@ -419,6 +475,7 @@ if (isset($_POST["tambah_prestasi"])) {
                         </div>
                         <div class="mt-4">
                             <form action="./ubah/ubah_foto.php?id=<?= $id; ?>" method="post" enctype="multipart/form-data" id="form_ganti_foto" class="space-y-4">
+                                <input type="hidden" name="fotoLama" value="<?= $siswa['foto'] ?? ''; ?>">
                                 <div>
                                     <label for="foto" class="block text-sm font-semibold text-gray-700 mb-1.5">Pilih Foto Baru</label>
                                     <input type="file" class="w-full rounded-xl border border-gray-200 shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer text-sm text-gray-600 focus:outline-none transition-all" id="foto" name="foto" required>
@@ -429,6 +486,37 @@ if (isset($_POST["tambah_prestasi"])) {
                     <div class="bg-gray-50/80 px-6 py-4 sm:flex sm:flex-row-reverse">
                         <button type="submit" form="form_ganti_foto" name="ganti" class="inline-flex w-full justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-secondary sm:ml-3 sm:w-auto transition-colors">Simpan Foto</button>
                         <button type="button" onclick="closeModal('ganti_foto')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ganti Email -->
+    <div id="ganti_email" class="hidden fixed inset-0 z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" onclick="closeModal('ganti_email')"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-gray-100">
+                    <div class="bg-white px-6 pb-6 pt-8">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
+                            <h3 class="text-xl font-serif font-bold text-gray-900" id="modal-title">Ganti Email</h3>
+                            <button type="button" onclick="closeModal('ganti_email')" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                                <i class="bi bi-x-lg text-xl"></i>
+                            </button>
+                        </div>
+                        <div class="mt-4">
+                            <form action="./ubah/ubah_email.php?id=<?= $id; ?>" method="post" id="form_ganti_email" class="space-y-4">
+                                <div>
+                                    <label for="email_baru" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Baru</label>
+                                    <input type="email" class="w-full rounded-xl border-gray-200 shadow-sm focus:border-primary focus:ring-primary text-sm px-4 py-2.5 border outline-none transition-all" id="email_baru" name="email_baru" required placeholder="email@contoh.com" value="<?= $siswa['email']; ?>" autocomplete="off">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50/80 px-6 py-4 sm:flex sm:flex-row-reverse">
+                        <button type="submit" form="form_ganti_email" name="ganti_email" class="inline-flex w-full justify-center rounded-xl bg-blue-500 px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-600 sm:ml-3 sm:w-auto transition-colors">Simpan Email</button>
+                        <button type="button" onclick="closeModal('ganti_email')" class="mt-3 inline-flex w-full justify-center rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors">Batal</button>
                     </div>
                 </div>
             </div>
@@ -513,6 +601,20 @@ if (isset($_POST["tambah_prestasi"])) {
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.body.style.overflow = '';
+        }
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
         }
     </script>
 </body>
