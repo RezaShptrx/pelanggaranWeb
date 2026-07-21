@@ -326,7 +326,7 @@ function ubah_siswa($data)
         $foto = upload();
     }
 
-    if (!$foto) {
+    if ($foto === false) {
         return false;
     }
 
@@ -340,8 +340,6 @@ function ubah_siswa($data)
                  foto = '$foto'
                  WHERE id_siswa = $id
                  ");
-    
-    $affected_siswa = mysqli_affected_rows($conn);
 
     // Update atau Insert tabel orang_tua
     $cek_ortu = query("SELECT * FROM orang_tua WHERE id_siswa = $id");
@@ -351,9 +349,8 @@ function ubah_siswa($data)
         mysqli_query($conn, "UPDATE orang_tua SET nama_orang_tua = '$nama_orang_tua', nomor_whatsapp = '$nomor_whatsapp' WHERE id_siswa = $id");
     }
     
-    $affected_ortu = mysqli_affected_rows($conn);
-
-    return ($affected_siswa > 0 || $affected_ortu > 0) ? 1 : 0;
+    // Selama tidak ada error SQL, anggap berhasil meskipun tidak ada row yang berubah nilainya
+    return mysqli_errno($conn) === 0 ? 1 : 0;
 }
 
 function ubah_password($data, $id)
@@ -401,7 +398,7 @@ function ubah_password($data, $id)
         }
     }
 
-    return mysqli_affected_rows($conn);
+    return mysqli_errno($conn) === 0 ? 1 : 0;
 }
 
 function ubah_email($data, $id)
@@ -411,7 +408,7 @@ function ubah_email($data, $id)
 
     mysqli_query($conn, "UPDATE siswa SET `email` = '$email_baru' WHERE id_siswa = $id");
 
-    return mysqli_affected_rows($conn);
+    return mysqli_errno($conn) === 0 ? 1 : 0;
 }
 
 function ubah_foto($data, $id)
@@ -429,13 +426,13 @@ function ubah_foto($data, $id)
         $foto = upload();
     }
 
-    if (!$foto) {
+    if ($foto === false) {
         return false;
     }
 
     mysqli_query($conn, "UPDATE siswa SET `foto` = '$foto' WHERE id_siswa = $id");
 
-    return mysqli_affected_rows($conn);
+    return mysqli_errno($conn) === 0 ? 1 : 0;
 }
 
 function tambah_prestasi($data, $id)

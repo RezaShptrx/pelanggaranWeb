@@ -23,8 +23,31 @@ if (isset($_SESSION["siswa"])) {
 
 require 'functions.php';
 
-$siswa_sekolah = query("SELECT siswa.id_siswa, siswa.id_kelas, siswa.id_jurusan, siswa.nis, siswa.nama_siswa, siswa.jmlh_poin, kelas.nama_kelas FROM siswa INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas ORDER BY jmlh_poin , nama_kelas");
+$keyword = isset($_GET["keyword"]) ? $_GET["keyword"] : "";
+$filter_kelas = isset($_GET["kelas"]) ? $_GET["kelas"] : "";
+$filter_jurusan = isset($_GET["jurusan"]) ? $_GET["jurusan"] : "";
+
+$where_clauses = [];
+if ($keyword != "") {
+    $where_clauses[] = "(siswa.nis LIKE '%$keyword%' OR siswa.nama_siswa LIKE '%$keyword%')";
+}
+if ($filter_kelas != "") {
+    $where_clauses[] = "siswa.id_kelas = '$filter_kelas'";
+}
+if ($filter_jurusan != "") {
+    $where_clauses[] = "jurusan.kode_jurusan = '$filter_jurusan'";
+}
+
+$where_sql = "";
+if (count($where_clauses) > 0) {
+    $where_sql = " WHERE " . implode(" AND ", $where_clauses);
+}
+
+$query_base = "SELECT siswa.id_siswa, siswa.id_kelas, siswa.id_jurusan, siswa.nis, siswa.nama_siswa, siswa.jmlh_poin, kelas.nama_kelas, jurusan.kode_jurusan FROM siswa INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas INNER JOIN jurusan ON siswa.id_jurusan=jurusan.id_jurusan" . $where_sql . " ORDER BY jmlh_poin, nama_kelas";
+
+$siswa_sekolah = query($query_base);
 $kelas_sekolah = query("SELECT * FROM kelas");
+$jurusan_sekolah = query("SELECT DISTINCT kode_jurusan FROM jurusan ORDER BY kode_jurusan");
 
 if (isset($_POST["tambah"])) {
     if (tambah_siswa($_POST) > 0) {
@@ -162,12 +185,27 @@ if (isset($_POST["tambah"])) {
                         </div>
                         
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                            <!-- Search Form -->
-                            <form action="" method="post" class="flex flex-col sm:flex-row items-center gap-3 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm flex-grow">
+                            <!-- Search & Filter Form -->
+                            <form action="" method="get" class="flex flex-col sm:flex-row items-center gap-3 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm flex-grow">
                                 <div class="flex items-center w-full px-2">
                                     <i class="bi bi-search text-gray-400"></i>
-                                    <input type="text" name="keyword" placeholder="Cari siswa..." autocomplete="off" class="keyword w-full px-3 py-2 text-sm border-none bg-transparent focus:ring-0 text-gray-700 outline-none">
+                                    <input type="text" name="keyword" value="<?= isset($_GET['keyword']) ? $_GET['keyword'] : '' ?>" placeholder="Cari siswa..." autocomplete="off" class="keyword w-full px-3 py-2 text-sm border-none bg-transparent focus:ring-0 text-gray-700 outline-none">
                                 </div>
+                                <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
+                                <select name="kelas" class="filter-kelas w-full sm:w-auto px-3 py-2 text-sm border-none bg-transparent focus:ring-0 text-gray-700 outline-none cursor-pointer" onchange="this.form.submit()">
+                                    <option value="">Semua Kelas</option>
+                                    <?php foreach ($kelas_sekolah as $k) : ?>
+                                        <option value="<?= $k['id_kelas']; ?>" <?= (isset($_GET['kelas']) && $_GET['kelas'] == $k['id_kelas']) ? 'selected' : ''; ?>><?= $k['nama_kelas']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="h-6 w-px bg-gray-200 hidden sm:block"></div>
+                                <select name="jurusan" class="filter-jurusan w-full sm:w-auto px-3 py-2 text-sm border-none bg-transparent focus:ring-0 text-gray-700 outline-none cursor-pointer" onchange="this.form.submit()">
+                                    <option value="">Semua Jurusan</option>
+                                    <?php foreach ($jurusan_sekolah as $j) : ?>
+                                        <option value="<?= $j['kode_jurusan']; ?>" <?= (isset($_GET['jurusan']) && $_GET['jurusan'] == $j['kode_jurusan']) ? 'selected' : ''; ?>><?= $j['kode_jurusan']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="submit" class="hidden">Cari</button>
                             </form>
                             
                             <!-- Action Buttons -->
@@ -210,11 +248,11 @@ if (isset($_POST["tambah"])) {
                                 $jumlah_data = count($siswa_sekolah);
                                 $total_halaman = ceil($jumlah_data / $batas);
 
-                                $data_siswa = query("SELECT siswa.id_siswa, siswa.id_kelas, siswa.id_jurusan, siswa.nis, siswa.nama_siswa, siswa.jmlh_poin, kelas.nama_kelas FROM siswa INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas ORDER BY jmlh_poin , nama_kelas LIMIT $halaman_awal, $batas");
+                                $data_siswa = query($query_base . " LIMIT $halaman_awal, $batas");
                                 $nomor = $halaman_awal + 1;
                                 ?>
                                 <?php foreach ($data_siswa as $siswa) : ?>
-                                    <?php $jurusan = query("SELECT kode_jurusan FROM jurusan WHERE id_jurusan=" . $siswa['id_jurusan'])[0];
+                                    <?php 
                                     $jmlh_poin = intval($siswa["jmlh_poin"]);
                                     ?>
                                     <tr class="hover:bg-gray-50/50 transition-colors group">
@@ -235,7 +273,7 @@ if (isset($_POST["tambah"])) {
                                             <?php endif; ?>
                                         </td>
                                         <td class="py-4 px-5 text-sm text-gray-600 font-medium">
-                                            <?= $siswa["nama_kelas"]; ?> <?= $jurusan["kode_jurusan"]; ?>
+                                            <?= $siswa["nama_kelas"]; ?> <?= $siswa["kode_jurusan"]; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -243,24 +281,29 @@ if (isset($_POST["tambah"])) {
                         </table>
                     </div>
                     
-                    <!-- Pagination -->
                     <?php if($total_halaman > 1): ?>
+                    <?php 
+                        $qs = $_GET;
+                        unset($qs['halaman']);
+                        $query_string = http_build_query($qs);
+                        $query_string = $query_string ? '&' . $query_string : '';
+                    ?>
                     <div class="mt-8 flex justify-center">
                         <nav class="inline-flex rounded-xl shadow-sm -space-x-px" aria-label="Pagination">
-                            <a <?php if ($halaman > 1) { echo "href='?halaman=$previous'"; } ?> class="relative inline-flex items-center px-4 py-2 rounded-l-xl border border-gray-200 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
+                            <a <?php if ($halaman > 1) { echo "href='?halaman=$previous$query_string'"; } ?> class="relative inline-flex items-center px-4 py-2 rounded-l-xl border border-gray-200 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
                                 <span class="sr-only">Previous</span>
                                 <i class="bi bi-chevron-left"></i>
                             </a>
                             
                             <?php for ($i = 1; $i <= $total_halaman; $i++) : ?>
                                 <?php if($i == $halaman): ?>
-                                    <a href="?halaman=<?= $i; ?>" class="relative inline-flex items-center px-4 py-2 border border-primary bg-primary text-sm font-bold text-white z-10"><?= $i; ?></a>
+                                    <a href="?halaman=<?= $i; ?><?= $query_string ?>" class="relative inline-flex items-center px-4 py-2 border border-primary bg-primary text-sm font-bold text-white z-10"><?= $i; ?></a>
                                 <?php else: ?>
-                                    <a href="?halaman=<?= $i; ?>" class="relative inline-flex items-center px-4 py-2 border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"><?= $i; ?></a>
+                                    <a href="?halaman=<?= $i; ?><?= $query_string ?>" class="relative inline-flex items-center px-4 py-2 border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"><?= $i; ?></a>
                                 <?php endif; ?>
                             <?php endfor; ?>
                             
-                            <a <?php if ($halaman < $total_halaman) { echo "href='?halaman=$next'"; } ?> class="relative inline-flex items-center px-4 py-2 rounded-r-xl border border-gray-200 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
+                            <a <?php if ($halaman < $total_halaman) { echo "href='?halaman=$next$query_string'"; } ?> class="relative inline-flex items-center px-4 py-2 rounded-r-xl border border-gray-200 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
                                 <span class="sr-only">Next</span>
                                 <i class="bi bi-chevron-right"></i>
                             </a>

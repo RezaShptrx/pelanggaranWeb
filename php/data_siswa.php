@@ -45,6 +45,13 @@ $pelanggaran_siswa = query("SELECT * FROM pelanggaran_siswa WHERE id_pelanggar =
 $prestasi_siswa  = query("SELECT * FROM prestasi_siswa WHERE id_siswa = $id");
 $ket_prestasi = query("SELECT * FROM ket_prestasi");
 
+// Ambil data orang tua
+$query_ortu = query("SELECT * FROM orang_tua WHERE id_siswa = $id");
+$ortu = !empty($query_ortu) ? $query_ortu[0] : [
+    "nama_orang_tua" => "-",
+    "nomor_whatsapp" => "-"
+];
+
 if (isset($_POST["tambah_prestasi"])) {
     if (tambah_prestasi($_POST, $id) > 0) {
         echo "<script>
@@ -204,7 +211,18 @@ if (isset($_POST["tambah_prestasi"])) {
                                     </div>
                                     <div class="grid grid-cols-3 gap-4">
                                         <dt class="font-bold text-gray-500 col-span-1">Email</dt>
-                                        <dd class="font-medium text-gray-900 col-span-2"><?= $siswa["email"]; ?></dd>
+                                        <dd class="font-medium text-gray-900 col-span-2"><?= $siswa["email"] ?: '-'; ?></dd>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <dt class="font-bold text-gray-500 col-span-1">Orang Tua</dt>
+                                        <dd class="font-medium text-gray-900 col-span-2">
+                                            <?= htmlspecialchars($ortu["nama_orang_tua"]); ?>
+                                            <?php if ($ortu["nomor_whatsapp"] !== '-') : ?>
+                                                <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $ortu["nomor_whatsapp"]); ?>" target="_blank" class="inline-flex items-center text-green-600 hover:text-green-700 ml-2">
+                                                    <i class="bi bi-whatsapp"></i>
+                                                </a>
+                                            <?php endif; ?>
+                                        </dd>
                                     </div>
                                     <div class="grid grid-cols-3 gap-4">
                                         <dt class="font-bold text-gray-500 col-span-1">Poin</dt>

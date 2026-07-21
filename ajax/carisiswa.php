@@ -17,37 +17,35 @@ $halaman_awal = ($halaman > 1) ? ($halaman * $batas) - $batas : 0;
 $previous = $halaman - 1;
 $next = $halaman + 1;
 
-if (isset($_GET["keyword"])) {
-    $keyword = $_GET["keyword"];
-    $keyword = explode(" ", $keyword);
-    if (count($keyword) == 2) {
-        $query = "SELECT siswa.id_siswa, siswa.id_kelas, siswa.id_jurusan, siswa.nis, 
-              siswa.nama_siswa, siswa.jmlh_poin, kelas.nama_kelas, jurusan.kode_jurusan FROM siswa 
-              INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas 
-              INNER JOIN jurusan ON siswa.id_jurusan=jurusan.id_jurusan WHERE
-              nama_kelas LIKE '%$keyword[0]' AND kode_jurusan LIKE '%$keyword[1]%' ORDER BY jmlh_poin, nama_kelas LIMIT $halaman_awal, $batas
-              ";
-    } else {
-        $query = "SELECT siswa.id_siswa, siswa.id_kelas, siswa.id_jurusan, siswa.nis, 
-              siswa.nama_siswa, siswa.jmlh_poin, kelas.nama_kelas, jurusan.kode_jurusan FROM siswa 
-              INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas 
-              INNER JOIN jurusan ON siswa.id_jurusan=jurusan.id_jurusan WHERE
-              id_siswa LIKE '%$keyword[0]%' OR
-              nis LIKE '%$keyword[0]%' OR
-              nama_siswa LIKE '%$keyword[0]%' OR
-              nama_kelas LIKE '$keyword[0]%' OR
-              kode_jurusan LIKE '$keyword[0]%' ORDER BY jmlh_poin, nama_kelas LIMIT $halaman_awal, $batas
-              ";
-    }
+$keyword_input = isset($_GET["keyword"]) ? $_GET["keyword"] : "";
+$filter_kelas = isset($_GET["kelas"]) ? $_GET["kelas"] : "";
+$filter_jurusan = isset($_GET["jurusan"]) ? $_GET["jurusan"] : "";
 
-    $siswa_sekolah = query($query);
+$where_clauses = [];
+if ($keyword_input != "") {
+    $where_clauses[] = "(siswa.nis LIKE '%$keyword_input%' OR siswa.nama_siswa LIKE '%$keyword_input%')";
+}
+if ($filter_kelas != "") {
+    $where_clauses[] = "siswa.id_kelas = '$filter_kelas'";
+}
+if ($filter_jurusan != "") {
+    $where_clauses[] = "jurusan.kode_jurusan = '$filter_jurusan'";
 }
 
-if (empty($_GET["keyword"])) {
-    $jumlah_data = count($jmlh_siswa);
-} else {
-    $jumlah_data = count($siswa_sekolah);
+$where_sql = "";
+if (count($where_clauses) > 0) {
+    $where_sql = " WHERE " . implode(" AND ", $where_clauses);
 }
+
+$query = "SELECT siswa.id_siswa, siswa.id_kelas, siswa.id_jurusan, siswa.nis, 
+      siswa.nama_siswa, siswa.jmlh_poin, kelas.nama_kelas, jurusan.kode_jurusan FROM siswa 
+      INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas 
+      INNER JOIN jurusan ON siswa.id_jurusan=jurusan.id_jurusan" . $where_sql . " ORDER BY jmlh_poin, nama_kelas LIMIT $halaman_awal, $batas";
+
+$siswa_sekolah = query($query);
+
+$query_count = "SELECT * FROM siswa INNER JOIN kelas ON siswa.id_kelas=kelas.id_kelas INNER JOIN jurusan ON siswa.id_jurusan=jurusan.id_jurusan" . $where_sql;
+$jumlah_data = count(query($query_count));
 
 $total_halaman = ceil($jumlah_data / $batas);
 $nomor = $halaman_awal + 1;
@@ -79,7 +77,7 @@ $nomor = $halaman_awal + 1;
                         <th class="align-middle">Kelas</th>
                     </thead>
                     <?php foreach ($siswa_sekolah as $siswa) : ?>
-                        <?php $jurusan = query("SELECT kode_jurusan FROM jurusan WHERE id_jurusan=" . $siswa['id_jurusan'])[0];
+                        <?php 
                         $jmlh_poin = intval($siswa["jmlh_poin"]);
                         ?>
                         <tbody>
@@ -93,25 +91,31 @@ $nomor = $halaman_awal + 1;
                                     Drop Out
                                 <?php endif; ?>
                             </td>
-                            <td><?= $siswa["nama_kelas"]; ?> <?= $jurusan["kode_jurusan"]; ?></td>
+                            <td><?= $siswa["nama_kelas"]; ?> <?= $siswa["kode_jurusan"]; ?></td>
                         </tbody>
                     <?php endforeach; ?>
                 </table>
                 <nav class="mt-4">
+                    <?php 
+                        $qs = $_GET;
+                        unset($qs['halaman']);
+                        $query_string = http_build_query($qs);
+                        $query_string = $query_string ? '&' . $query_string : '';
+                    ?>
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
                             <a class="page-link text-dark" <?php if ($halaman > 1) {
-                                                                echo "href='?halaman=$previous'";
+                                                                echo "href='?halaman=$previous$query_string'";
                                                             } ?>><span aria-hidden="true">&laquo;</span></a>
                         </li>
                         <?php for ($i = 1; $i <= $total_halaman; $i++) : ?>
                             <li class="page-item">
-                                <a href="?halaman=<?= $i; ?>" class="page-link text-dark"><?= $i; ?></a>
+                                <a href="?halaman=<?= $i; ?><?= $query_string ?>" class="page-link text-dark"><?= $i; ?></a>
                             </li>
                         <?php endfor; ?>
                         <li class="page-item">
                             <a class="page-link text-dark" <?php if ($halaman < $total_halaman) {
-                                                                echo "href='?halaman=$next'";
+                                                                echo "href='?halaman=$next$query_string'";
                                                             } ?>><span aria-hidden="true">&raquo;</span></a>
                         </li>
                     </ul>
